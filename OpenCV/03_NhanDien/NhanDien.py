@@ -23,7 +23,6 @@ def getImageWithID(path):
         cv2.waitKey(10)
     return faces, IDs
 
-
 faces, IDs =  getImageWithID(path)
 recognizer.train(faces, np.array(IDs))
 if not os.path.exists("F:/QT/BIN/OpenCV/03_NhanDien/recoginizer"):
