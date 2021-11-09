@@ -1,20 +1,66 @@
 import cv2
 import numpy as np
 import sqlite3
+from datetime import datetime
 import os
 
-def insertIntoDatabase(SoTu,ThoiGianGuiDo,ThoiGianLayDo,TrangThai):
+#Insert vao Database
+def insertIntoDatabase(SoTu):
     conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
-    query = "INSERT INTO data (SoTu,ThoiGianGuiDo,ThoiGianLayDo,TrangThai) VALUES ("+str(SoTu) + ",'" + str(ThoiGianGuiDo) + "','" + str(ThoiGianLayDo) + "','" + str(TrangThai) +"')"
+    query = "SELECT * FROM data WHERE SoTu = " + str(SoTu)
+    cusror = conn.execute(query)
+    isRecordExist = 0
+    for row in cusror:
+        isRecordExist = 1
+    if(isRecordExist == 0):
+        query = "INSERT INTO data (SoTu,ThoiGian) VALUES (" + str(SoTu) + ",'" + str(datetime.now().strftime("%d.%m.%Y %H.%M")) + "')"
+    else:
+        query = "UPDATE data SET ThoiGian = '"+ str(datetime.now().strftime("%d.%m.%Y %H.%M")) +"' WHERE SoTu =" + str(SoTu)
+
     conn.execute(query)
     conn.commit()
     conn.close() 
-    ########################    
-def updateIntoDatabase(ID,ThoiGianLayDo,TrangThai):
-    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
-    query = "UPDATE data SET ThoiGianLayDo = '" + str(ThoiGianLayDo) + "','" + str(TrangThai) + "' WHERE ID = " + str(ID)
-    conn.execute(query)
-    conn.commit()
-    conn.close() 
-insertIntoDatabase(1,"8h00","9h00","Da Gui")
-updateIntoDatabase(14,"15h00","Da Lay")
+
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    sampleNum = 0
+    while(True):
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray,1.3,5)
+        for(x,y,w,h) in faces:
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+            if not os.path.exists("F:/QT/BIN/Demo/Ver_1/dataSet"):
+                os.makedirs("F:/QT/BIN/Demo/Ver_1/dataSet")
+            sampleNum += 1
+            cv2.imwrite("F:/QT/BIN/Demo/Ver_1/dataSet/TuSo."+str(SoTu)+"."+str(sampleNum)+".jpg",gray[y : y+h,x : x+w])
+        cv2.imshow("frame",frame)
+        cv2.waitKey(1)
+
+        if sampleNum > 100:
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+#Lay du lieu khuon mat    
+def getPhoto(SoTu):
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    sampleNum = 0
+    while(True):
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray,1.3,5)
+        for(x,y,w,h) in faces:
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+            if not os.path.exists("F:/QT/BIN/Demo/Ver_1/dataSet"):
+                os.makedirs("F:/QT/BIN/Demo/Ver_1/dataSet")
+            sampleNum += 1
+            cv2.imwrite("F:/QT/BIN/Demo/Ver_1/dataSet/TuSo."+str(SoTu)+"."+str(sampleNum)+".jpg",gray[y : y+h,x : x+w])
+        cv2.imshow("frame",frame)
+        cv2.waitKey(1)
+
+        if sampleNum > 100:
+            break
+    cap.release()
+    cv2.destroyAllWindows()
