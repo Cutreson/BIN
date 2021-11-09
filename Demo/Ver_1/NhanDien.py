@@ -9,8 +9,8 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 recognizer.read("F:/QT/BIN/Demo/Ver_1/recoginizer/trainningData.yml")
 def getProfile(id):
-    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/data.db")
-    query = "SELECT * FROM people WHERE ID = " + str(id)
+    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
+    query = "SELECT * FROM data WHERE SoTu = " + str(id)
     cusror = conn.execute(query)
     profile = None
     for row in cusror:

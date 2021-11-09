@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
 import sqlite3
+from PIL import Image
 from datetime import datetime
 import os
 
-#Insert vao Database
-def insertIntoDatabase(SoTu):
+#Insert vao Database, lay du lieu nhan dien
+def insertRecord(SoTu):
     conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
     query = "SELECT * FROM data WHERE SoTu = " + str(SoTu)
     cusror = conn.execute(query)
@@ -16,7 +17,6 @@ def insertIntoDatabase(SoTu):
         query = "INSERT INTO data (SoTu,ThoiGian) VALUES (" + str(SoTu) + ",'" + str(datetime.now().strftime("%d.%m.%Y %H.%M")) + "')"
     else:
         query = "UPDATE data SET ThoiGian = '"+ str(datetime.now().strftime("%d.%m.%Y %H.%M")) +"' WHERE SoTu =" + str(SoTu)
-
     conn.execute(query)
     conn.commit()
     conn.close() 
@@ -36,11 +36,24 @@ def insertIntoDatabase(SoTu):
             cv2.imwrite("F:/QT/BIN/Demo/Ver_1/dataSet/TuSo."+str(SoTu)+"."+str(sampleNum)+".jpg",gray[y : y+h,x : x+w])
         cv2.imshow("frame",frame)
         cv2.waitKey(1)
-
         if sampleNum > 100:
             break
     cap.release()
     cv2.destroyAllWindows()
+
+#Xoa ban ghi trong database, xoa anh nhan dien
+def deleteRecord(SoTu):
+    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
+    query = "DELETE FROM data WHERE SoTu = " + str(SoTu)
+    conn.execute(query)
+    conn.commit()
+    conn.close() 
+
+    path = "F:/QT/BIN/Demo/Ver_1/dataSet"
+    imagePaths = [os.path.join(path,f) for f in os.listdir(path)]
+    for imagePath in imagePaths:
+        if(SoTu == int(imagePath.split("\\")[1].split(".")[1])):
+            os.remove(imagePath)
 
 #Lay du lieu khuon mat    
 def getPhoto(SoTu):
@@ -64,3 +77,6 @@ def getPhoto(SoTu):
             break
     cap.release()
     cv2.destroyAllWindows()
+
+#insertRecord(1)
+deleteRecord(1)
