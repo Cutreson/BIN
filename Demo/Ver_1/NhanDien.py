@@ -8,9 +8,9 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fronta
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 recognizer.read("F:/QT/BIN/Demo/Ver_1/recoginizer/trainningData.yml")
-def getProfile(id):
+def getProfile(SoTu):
     conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
-    query = "SELECT * FROM data WHERE SoTu = " + str(id)
+    query = "SELECT * FROM data WHERE SoTu = " + str(SoTu)
     cusror = conn.execute(query)
     profile = None
     for row in cusror:
@@ -27,9 +27,9 @@ while(True):
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
 
         roi_gray = gray[y:y+h,x:x+w]
-        id,confidence = recognizer.predict(roi_gray)
+        SoTu,confidence = recognizer.predict(roi_gray)
         if confidence < 70:
-            profile = getProfile(id)
+            profile = getProfile(SoTu)
             if(profile != None):
                 cv2.putText(frame,""+str(profile[1]), (x+10,y+h+30), cv2.FONT_ITALIC, 1, (0,255,0),2)
         else:
