@@ -55,5 +55,5 @@ def deleteRecord(SoTu):
         if(SoTu == int(imagePath.split("\\")[1].split(".")[1])):
             os.remove(imagePath)
 
-#insertRecord(1)
+insertRecord(1)
 #deleteRecord(1)

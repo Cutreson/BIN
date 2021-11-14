@@ -18,5 +18,6 @@ while(True):
         playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_1.mp3")
     elif "nhận diện khuôn mặt" in text:
         playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_2.mp3")
+        print("Nhan dien thanh cong")
     else:
         playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_3.mp3")
