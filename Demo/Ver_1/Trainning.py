@@ -3,7 +3,8 @@ import numpy as np
 import os
 from PIL import Image
 
-path = "F:/QT/BIN/Demo/Ver_1/dataSet"
+url = "F:/QT/BIN/Demo/Ver_1/"
+path = url + "dataSet"
 
 def getImageWithSoTu(path):
     imagePaths = [os.path.join(path,f) for f in os.listdir(path)]
@@ -26,8 +27,8 @@ def trainData():
     faces, SoTus =  getImageWithSoTu(path)
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.train(faces, np.array(SoTus))
-    if not os.path.exists("F:/QT/BIN/Demo/Ver_1/recoginizer"):
-        os.makedirs("F:/QT/BIN/Demo/Ver_1/recoginizer")
-    recognizer.save("F:/QT/BIN/Demo/Ver_1/recoginizer/trainningData.yml")
+    if not os.path.exists(url + "recoginizer"):
+        os.makedirs(url + "Ver_1/recoginizer")
+    recognizer.save(url + "recoginizer/trainningData.yml")
 
 trainData()

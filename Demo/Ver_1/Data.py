@@ -5,9 +5,10 @@ from PIL import Image
 from datetime import datetime
 import os
 
+url = "F:/QT/BIN/Demo/Ver_1/"
 #Insert vao Database, lay du lieu nhan dien
 def insertRecord(SoTu):
-    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
+    conn = sqlite3.connect(url + "database.db")
     query = "SELECT * FROM data WHERE SoTu = " + str(SoTu)
     cusror = conn.execute(query)
     isRecordExist = 0
@@ -30,26 +31,29 @@ def insertRecord(SoTu):
         faces = face_cascade.detectMultiScale(gray,1.3,5)
         for(x,y,w,h) in faces:
             cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-            if not os.path.exists("F:/QT/BIN/Demo/Ver_1/dataSet"):
-                os.makedirs("F:/QT/BIN/Demo/Ver_1/dataSet")
+            if not os.path.exists(url + "dataSet"):
+                os.makedirs(url + "dataSet")
             sampleNum += 1
-            cv2.imwrite("F:/QT/BIN/Demo/Ver_1/dataSet/TuSo."+str(SoTu)+"."+str(sampleNum)+".jpg",gray[y : y+h,x : x+w])
+            cv2.imwrite(url + "dataSet/TuSo."+str(SoTu)+"."+str(sampleNum)+".jpg",gray[y : y+h,x : x+w])
         cv2.imshow("frame",frame)
         cv2.waitKey(1)
-        if sampleNum > 100:
+        if sampleNum > 10:
+            if not os.path.exists(url + "dataFace"):
+                os.makedirs(url + "dataFace")
+            cv2.imwrite(url + "dataFace/TuSo."+str(SoTu) + "_" + str(datetime.now().strftime("%d.%m.%Y %H.%M")) + ".jpg",frame[y-80 : y+h+80,x-60 : x+w+60])
             break
     cap.release()
     cv2.destroyAllWindows()
 
 #Xoa ban ghi trong database, xoa anh nhan dien
 def deleteRecord(SoTu):
-    conn = sqlite3.connect("F:/QT/BIN/Demo/Ver_1/database.db")
+    conn = sqlite3.connect(url + "database.db")
     query = "DELETE FROM data WHERE SoTu = " + str(SoTu)
     conn.execute(query)
     conn.commit()
     conn.close() 
 
-    path = "F:/QT/BIN/Demo/Ver_1/dataSet"
+    path = url + "dataSet"
     imagePaths = [os.path.join(path,f) for f in os.listdir(path)]
     for imagePath in imagePaths:
         if(SoTu == int(imagePath.split("\\")[1].split(".")[1])):
