@@ -3,7 +3,7 @@ from gtts import gTTS
 import os
 import time
 import playsound
-from Demo.Ver_1.NhanDien import nhanDien
+from NhanDien import nhanDien
 
 r = sr.Recognizer()
 
@@ -19,8 +19,10 @@ while(True):
     if (text==""):
         playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_1.mp3")
     elif "nhận diện khuôn mặt" in text:
-        if(nhanDien == True):
+        if(nhanDien() == True):
             playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_2.mp3")
             print("Nhan dien thanh cong")
+        else:
+            print("Khong thanh cong")
     else:
         playsound.playsound("F:/QT/BIN/Speech/Basic/02_Speech_to_Text/voice_3.mp3")

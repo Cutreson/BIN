@@ -32,9 +32,12 @@ def nhanDien():
             profile = getProfile(SoTu)
             if(profile != None):
                 print("True")
+                cap.release()
+                return True
         else:
             print("False")
-    cap.release()
+            cap.release()
+            return False
 
 #####################################################
 nhanDien()
