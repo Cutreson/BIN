@@ -4,7 +4,7 @@ import sqlite3
 from PIL import Image
 from datetime import datetime
 import os
-
+#
 url = "F:/QT/BIN/Demo/Ver_1/"
 #Insert vao Database, lay du lieu nhan dien
 def insertRecord(SoTu):
